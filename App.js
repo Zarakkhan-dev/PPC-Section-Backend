@@ -8,6 +8,10 @@ const model= require("./Backend/Schema");
 var cors = require('cors');
 app.use(cors())
 const secretKey = 'mysecretkeyistobuildreactnativeappofsectionsoflaw1to351';
+
+app.get("/",(req,res)=>{
+    res.send("homepage");
+})
 app.post("/login",async(req,res)=>{
     const {email,password,token} = req.body;
     try{
