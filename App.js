@@ -61,6 +61,3 @@ app.post("/signup",async(req,res)=>{
 app.get("/home",(req,res)=>{
     res.send("hello world")
 })
-app.listen(3000,()=>{
-    console.log("listen to the port number 3000")
-})
