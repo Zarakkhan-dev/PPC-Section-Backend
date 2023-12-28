@@ -9,9 +9,7 @@ var cors = require('cors');
 app.use(cors())
 const secretKey = 'mysecretkeyistobuildreactnativeappofsectionsoflaw1to351';
 
-app.get("/",(req,res)=>{
-    res.send("homepage");
-})
+
 app.post("/login",async(req,res)=>{
     const {email,password} = req.body;
     try{
@@ -61,8 +59,9 @@ app.post("/signup",async(req,res)=>{
     }
    
 })
-app.get("/home",(req,res)=>{
-    res.send("hello world")
+app.use("/",(req,res)=>{
+    res.json({message:"hellow homepage"})
+   
 })
 app.listen(8000,()=>{
     console.log("listening ar port 3000")
