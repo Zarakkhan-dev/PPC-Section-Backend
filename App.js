@@ -13,13 +13,16 @@ app.get("/",(req,res)=>{
     res.send("homepage");
 })
 app.post("/login",async(req,res)=>{
-    const {email,password,token} = req.body;
+    const {email,password} = req.body;
     try{
         const userResponse = await model.findOne({email});
         if(userResponse){
             const hash_password = await bcrypt.compare(password,userResponse.password);
             if(hash_password){
-                res.status(201).json({message:"User Login Sucessfully"});
+                const token = jwt.sign({email},secretKey);
+                await userResponse.updateOne(email,token);
+
+                res.status(201).json({message:"User Login Sucessfully",token});
             }
             else{
                 res.status(202).json({message:"Invalid Email or password"});
@@ -44,7 +47,7 @@ app.post("/signup",async(req,res)=>{
         const SavedResponse = await UserData.save();
         if(SavedResponse){
             res.status(201).json({message:"Registered Successfully",token})
-            console.log("working")
+            
         }
         else{
             res.status(202).json({message:"Not Registered Successfully"})
@@ -60,4 +63,7 @@ app.post("/signup",async(req,res)=>{
 })
 app.get("/home",(req,res)=>{
     res.send("hello world")
+})
+app.listen(8000,()=>{
+    console.log("listening ar port 3000")
 })
