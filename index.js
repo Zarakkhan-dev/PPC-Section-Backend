@@ -18,7 +18,7 @@ app.post("/login",async(req,res)=>{
             const hash_password = await bcrypt.compare(password,userResponse.password);
             if(hash_password){
                 const token = jwt.sign({email},secretKey);
-                await userResponse.updateOne(email,token);
+                await userResponse.updateOne({email,token});
 
                 res.status(201).json({message:"User Login Sucessfully",token});
             }
