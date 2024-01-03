@@ -35,7 +35,7 @@ app.post("/login",async(req,res)=>{
 })
 app.post("/signup",async(req,res)=>{
   
-    const {username,email,password }= req.body;
+    const {email,password}= req.body;
     try {
         const userResponse = await model.findOne({email});
         if(!userResponse){
@@ -63,6 +63,6 @@ app.use("/",(req,res)=>{
     res.json({message:"hellow homepage"})
    
 })
-app.listen(8000,()=>{
+app.listen(3001,()=>{
     console.log("listening ar port 3000")
 })
