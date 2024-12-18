@@ -1,18 +1,26 @@
 {
-  "name": "ppc-section-backend",
+  "name": "rentalcar",
   "version": "1.0.0",
-  "description": "",
-  "main": "App.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Zarak Khan",
   "license": "ISC",
+  "description": "A car rental management system",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3"
+    "knex": "^3.1.0",
+    "node-schedule": "^2.1.1",
+    "nodemailer": "^6.9.16",
+    "pg": "^8.13.1"
   }
 }

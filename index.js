@@ -1,68 +1,40 @@
-const express = require("express");
-const jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-const app =express();
+import express from "express";
+import db from "./Config/db.js";
+import { configDotenv } from "dotenv";
+import cors from "cors";
+import Mainroute from "./routes/mainRoutes.js";
+
+configDotenv();
+const app = express();
+
+async function startServer() {
+  try {
+    const result = await db.raw(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
+    );
+    console.log("Database connected successfully...");
+    console.log("Tables in the database:", result.rows);
+  } catch (err) {
+    console.error("Error connecting to the database:", err);
+    process.exit(1);
+  }
+}
+
+startServer();
+
+// Middlewares
 app.use(express.json());
-require("./Backend/connection")
-const model= require("./Backend/Schema");
-var cors = require('cors');
-app.use(cors())
-const secretKey = 'mysecretkeyistobuildreactnativeappofsectionsoflaw1to351';
+app.use(cors());
 
 
-app.post("/login",async(req,res)=>{
-    const {email,password} = req.body;
-    try{
-        const userResponse = await model.findOne({email});
-        if(userResponse){
-            const hash_password = await bcrypt.compare(password,userResponse.password);
-            if(hash_password){
-                const token = jwt.sign({email},secretKey);
-                await userResponse.updateOne({email,token});
+app.get("/", (req, res) => {
+  res.send("Car Rental API .... !");
+});
 
-                res.status(201).json({message:"User Login Sucessfully",token});
-            }
-            else{
-                res.status(202).json({message:"Invalid Email or password"});
-            }
-        }
-        else{
-            res.status(202).json({message:"Invalid Email or password"});
-        }
-    }catch(error){
-        console.log(error)
-    }
-})
-app.post("/signup",async(req,res)=>{
-  
-    const {email,password}= req.body;
-    try {
-        const userResponse = await model.findOne({email});
-        if(!userResponse){
-        const hash_password = await bcrypt.hash(password,10);
-        const token = jwt.sign({email},secretKey);
-        const UserData = new model ({username,email,password:hash_password,token});
-        const SavedResponse = await UserData.save();
-        if(SavedResponse){
-            res.status(201).json({message:"Registered Successfully",token})
-            
-        }
-        else{
-            res.status(202).json({message:"Not Registered Successfully"})
-        }
-        }else{
-            res.status(200).json({message:"user Already Exist"});
-        }
+app.use("/v0/api", Mainroute);
 
-    } catch (error) {
-        console.log(error)
-    }
-   
-})
-app.use("/",(req,res)=>{
-    res.json({message:"hellow homepage"})
-   
-})
-app.listen(3001,()=>{
-    console.log("listening ar port 3000")
-})
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running at port Number ${PORT}`);
+});
